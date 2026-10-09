@@ -7,11 +7,11 @@ https://www.lookmumnocomputer.com/sequencer-keyboard
 At first, I intended to create a clone of the one mentioned above to power my Atari Punk Console, but as I added some features I wanted, my code ended up becoming fully original.
 
 ## Features
-- Two Types of CV Outputs
-- A GATE Output
-- Start and Stop
+- 2 CV Outputs
+- 1 GATE Output
+- Start / Stop
 - Reset
-- Configurable range of about 40 to 240 BPM for reading a POT
+- About 40 to 240 BPM analog reading from a 10k POT
 
 
 ## LICENSE
