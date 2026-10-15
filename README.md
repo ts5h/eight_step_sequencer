@@ -15,5 +15,11 @@ At first, I intended to create a clone of the one mentioned above to power my At
 - About 40 to 240 BPM analog reading from a 10k POT
 
 
+## Schematic
+Under construction
+
+## Strip Board Layout
+Under construction
+
 ## LICENSE
 [MIT License](LICENSE)

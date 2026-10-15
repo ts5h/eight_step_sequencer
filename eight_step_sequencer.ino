@@ -31,6 +31,7 @@ void setup() {
   digitalWrite(STEP_PINS[currentStep], HIGH);
 }
 
+
 void loop() {
   unsigned long currentMillis = millis();
 
