@@ -15,7 +15,7 @@ bool lastRunState = HIGH;
 bool lastResetState = HIGH;
 bool lastStepState = HIGH;
 
-int delayWaitTime = 100;
+int delayWaitTime = 80;
 
 void setup() {
   for (int i = 0; i < 8; i++) {
@@ -56,6 +56,7 @@ void loop() {
   bool stepState = digitalRead(STEP_BTN_PIN);
   if (!isRunning && lastStepState == HIGH && stepState == LOW) {
     stepForward();
+    delay(delayWaitTime);
   }
 
   // Sequence progression (Only during running)
