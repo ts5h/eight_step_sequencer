@@ -1,6 +1,6 @@
 # 8 Step Sequencer
 
-An 8 step sequencer by using Arduino Nano.  
+An 8 step sequencer using Arduino Nano.  
 Inspired by Look Mum No Computer's Arduino 8 Step Sequencer Keyboard.
 https://www.lookmumnocomputer.com/sequencer-keyboard
 
@@ -11,6 +11,7 @@ At first, I intended to create a clone of the one mentioned above to power my At
 - 1 GATE Output
 - Start / Stop
 - Reset
+- Step Forward
 - About 40 to 240 BPM analog reading from a 10k POT
 
 
