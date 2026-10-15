@@ -1,64 +1,78 @@
 // Pin definitions
-const int STEP_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9}; // 各ステップの5V供給ピン
-const int TEMPO_POT_PIN = A0;                      // BPM調整ノブ
-const int RUN_BTN_PIN   = 10;                      // Run/Stopモーメンタリボタン
-const int RESET_BTN_PIN = 11;                      // Resetモーメンタリボタン
+// const int STEP_PINS[8] = {2, 3, 4, 5, 6, 7, 8, 9};
+const int STEP_PINS[8] = { 9, 8, 7, 6, 5, 4, 3, 2 };
+const int RUN_BTN_PIN = 10;
+const int RESET_BTN_PIN = 11;
+const int STEP_BTN_PIN = 15;
+const int TEMPO_POT_PIN = A0;
 
 // State values
-int currentStep = 0;
 bool isRunning = false;
+int currentStep = 0;
 unsigned long lastStepTime = 0;
 
-// ボタンのチャタリング防止用変数
 bool lastRunState = HIGH;
 bool lastResetState = HIGH;
+bool lastStepState = HIGH;
+
+int delayWaitTime = 100;
 
 void setup() {
   for (int i = 0; i < 8; i++) {
     pinMode(STEP_PINS[i], OUTPUT);
     digitalWrite(STEP_PINS[i], LOW);
   }
+
   pinMode(RUN_BTN_PIN, INPUT_PULLUP);
   pinMode(RESET_BTN_PIN, INPUT_PULLUP);
+  pinMode(STEP_BTN_PIN, INPUT_PULLUP);
 
-  // 初期状態（ステップ0をアクティブに）
+  // Initialize
   digitalWrite(STEP_PINS[currentStep], HIGH);
 }
 
 void loop() {
   unsigned long currentMillis = millis();
 
-  // 1. Run/Stop ボタンの判定（トグル動作）
+  // "Run/Stop" button check (Toggle)
   bool runState = digitalRead(RUN_BTN_PIN);
-  if (lastRunState == HIGH && runState == LOW) { // 押された瞬間
+  if (lastRunState == HIGH && runState == LOW) {
     isRunning = !isRunning;
-    delay(50); // 簡易デバウンス
+    delay(delayWaitTime);
   }
   lastRunState = runState;
 
-  // 2. Reset ボタンの判定（即座にステップ1へ）
+  // "Reset" button check (Go immediately to Step 1)
   bool resetState = digitalRead(RESET_BTN_PIN);
   if (lastResetState == HIGH && resetState == LOW) {
     digitalWrite(STEP_PINS[currentStep], LOW);
-    currentStep = 0; // ステップ1（インデックス0）に戻す
+    currentStep = 0;
     digitalWrite(STEP_PINS[currentStep], HIGH);
-    delay(50);
+    delay(delayWaitTime);
   }
   lastResetState = resetState;
 
-  // 3. シーケンスの進行処理（再生中の場合のみ）
+  // "Forward" button check
+  bool stepState = digitalRead(STEP_BTN_PIN);
+  if (!isRunning && lastStepState == HIGH && stepState == LOW) {
+    stepForward();
+  }
+
+  // Sequence progression (Only during running)
   if (isRunning) {
-    // BPM 40 (375ms) 〜 BPM 240 (62.5ms)
+    // BPM 40 (375ms)-240 (62.5ms)
     int tempoVal = analogRead(TEMPO_POT_PIN);
-    int stepInterval = map(tempoVal, 0, 1023, 375, 62); 
+    int stepInterval = map(tempoVal, 0, 1023, 375, 62);
 
     if (currentMillis - lastStepTime >= stepInterval) {
       lastStepTime = currentMillis;
-
-      // 現在のステップをOFFにして、次のステップへ
-      digitalWrite(STEP_PINS[currentStep], LOW);
-      currentStep = (currentStep + 1) % 8; // 0~7をループ
-      digitalWrite(STEP_PINS[currentStep], HIGH);
+      stepForward();
     }
   }
+}
+
+void stepForward() {
+  digitalWrite(STEP_PINS[currentStep], LOW);
+  currentStep = (currentStep + 1) % 8;
+  digitalWrite(STEP_PINS[currentStep], HIGH);
 }
