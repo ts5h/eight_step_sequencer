@@ -16,10 +16,11 @@ At first, I intended to create a clone of the one mentioned above to power my At
 
 
 ## Schematic
-Under construction
 
-## Strip Board Layout
-Under construction
+<img alt="Schematic 1" src="./Schematic/sch_root.png" />
+<img alt="Schematic 1" src="./Schematic/sch_gate.png" />
+<img alt="Schematic 1" src="./Schematic/sch_cvs.png" />
+
 
 ## LICENSE
 [MIT License](LICENSE)
